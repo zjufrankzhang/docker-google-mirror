@@ -1,26 +1,30 @@
-跑在 docker 里的 google 镜像
+##跑在 docker 里的 google 镜像
 ======
 
-简单两步获得 Google 镜像，使用方法：
+简单两步获得 Google 镜像，需要使用letsencrypt加密
+示例使用ubuntu16.04系统命令，将所有的example.yourdormain.com替换为你的域名
+因为需要使用letsencrypt自动配置证书，所以没有监听80端口，有需要的可以自行修改配置文件
 
+##第一步
+安装letsencrypt，并手工生成dhparam
 ```
-git clone https://github.com/yifeikong/docker-google-mirror
+sudo apt-get install letsencrypt
+letsencrypt certonly --standalone -d example.yourdormain.com
+openssl dhparam 2048 -out /etc/letsencrypt/live/example.yourdormain.com/dhparam.pem
+```
+##第二步
+运行docker
+```
+docker pull frankzhang/docker-google-mirror
+docker run -d -p 443:443/tcp --name google-mirror --restart=always -v /etc/letsencrypt/live/example.yourdormain.com/fullchain.pem:/etc/ssl/certs/fullchain.pem:ro -v /etc/letsencrypt/live/example.yourdormain.com/privkey.pem:/etc/ssl/private/privkey.pem:ro  -v /etc/letsencrypt/live/example.yourdormain.com/dhparam.pem:/etc/ssl/certs/dhparam.pem:ro google-mirror
+```
+##也可以自行build docker container
+注意提前准备好相应的证书文件
+```
+git clone https://github.com/zjufrankzhang/docker-google-mirror
 cd docker-google-mirror
 docker build -t google-mirror .
-docker run -d -p 80:80 google-mirror
-```
-
-配置https
-
-1. 编辑Dockerfile文件,注释第22行，并解注释第24、25行
-2. 申请域名证书，具体参考[Get Https For Free](https://gethttpsforfree.com/)
-3. 添加自己的域名证书到该目录下
-
-```shell
-cd docker-google-mirror
-cp ~/chained.pem ~/domain.key ~/dhparam.pem . # 把对应文件拷过来
-docker build -t google-mirror .
-docker run -d -p 80:80 -p 443:443 google-mirror
+docker run -d -p 443:443 google-mirror
 ```
 
 致谢

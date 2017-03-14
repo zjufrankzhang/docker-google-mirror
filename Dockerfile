@@ -1,5 +1,5 @@
 FROM alpine:3.2
-MAINTAINER Yifei Kong <kong@yifei.me>
+MAINTAINER Frank Zhang <zjufrankzhang@gmail.com>
 
 ENV NGINX_VER 1.10.0
 
@@ -21,10 +21,12 @@ RUN apk add --update git openssl-dev pcre-dev zlib-dev wget build-base && \
 
 #ADD nginx.conf /opt/nginx/conf/nginx.conf
 #如果需要https支持则注释上一行并解注释下两行
-ADD nginx-https.conf /opt/nginx/conf/nginx.conf
-ADD chained.pem /etc/ssl/certs/
-ADD domain.key /etc/ssl/private/
-ADD dhparam.pem /etc/ssl/certs/
+#ADD nginx-https.conf /opt/nginx/conf/nginx.conf
+ADD nginx-https-withpassword.conf /opt/nginx/conf/nginx.conf
+ADD htpasswd /opt/nginx/conf/htpasswd
+#ADD chained.pem /etc/ssl/certs/
+#ADD domain.key /etc/ssl/private/
+#ADD dhparam.pem /etc/ssl/certs/
 
-EXPOSE 80 443
+EXPOSE 443
 CMD ["/opt/nginx/sbin/nginx", "-g", "daemon off;"]
