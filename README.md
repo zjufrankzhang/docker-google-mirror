@@ -18,7 +18,7 @@ openssl dhparam 2048 -out /etc/letsencrypt/live/example.yourdormain.com/dhparam.
 运行docker
 ```
 docker pull frankzhang/docker-google-mirror
-docker run -d -p 443:443/tcp --name google-mirror --restart=always -v /etc/letsencrypt/live/example.yourdormain.com/fullchain.pem:/etc/ssl/certs/fullchain.pem:ro -v /etc/letsencrypt/live/example.yourdormain.com/privkey.pem:/etc/ssl/private/privkey.pem:ro  -v /etc/letsencrypt/live/example.yourdormain.com/dhparam.pem:/etc/ssl/certs/dhparam.pem:ro google-mirror
+docker run -d -p 443:443/tcp -p 80:80/tcp --name google-mirror --restart=always -v /etc/letsencrypt/live/example.yourdormain.com/fullchain.pem:/etc/ssl/certs/fullchain.pem:ro -v /etc/letsencrypt/live/example.yourdormain.com/privkey.pem:/etc/ssl/private/privkey.pem:ro  -v /etc/letsencrypt/live/example.yourdormain.com/dhparam.pem:/etc/ssl/certs/dhparam.pem:ro google-mirror
 ```
 也可以自行build docker container
 ------
@@ -27,7 +27,7 @@ docker run -d -p 443:443/tcp --name google-mirror --restart=always -v /etc/letse
 git clone https://github.com/zjufrankzhang/docker-google-mirror
 cd docker-google-mirror
 docker build -t google-mirror .
-docker run -d -p 443:443 google-mirror
+docker run -d -p 443:443 -p 80:80 google-mirror
 ```
 
 致谢
