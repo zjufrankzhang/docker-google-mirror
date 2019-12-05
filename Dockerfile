@@ -1,7 +1,7 @@
-FROM alpine:3.2
+FROM alpine:3.10.3
 MAINTAINER Frank Zhang <zjufrankzhang@gmail.com>
 
-ENV NGINX_VER 1.10.0
+ENV NGINX_VER 1.17.6
 
 RUN apk add --update git openssl-dev pcre-dev zlib-dev wget build-base && \
     mkdir src && cd src && \
