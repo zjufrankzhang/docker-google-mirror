@@ -12,7 +12,8 @@ RUN apk add --update git openssl-dev pcre-dev zlib-dev wget build-base && \
     cd nginx-${NGINX_VER} && \
     ./configure --prefix=/opt/nginx \
         --with-http_ssl_module \
-        --add-module=../ngx_http_google_filter_module \
+	    --with-http_v2_module \
+        --add-dynamic-module=../ngx_http_google_filter_module \
         --add-module=../ngx_http_substitutions_filter_module && \
     make && make install && \
     apk del git build-base && \
